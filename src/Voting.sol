@@ -6,8 +6,8 @@ contract Voting {
         uint256 electionId;
         address[] addr;
         uint256[] votes;
-        uint startTime;
-        uint endTime;
+        uint256 startTime;
+        uint256 endTime;
     }
 
     mapping(uint256 => Election) private s_elections;
@@ -16,12 +16,8 @@ contract Voting {
     address private s_owner;
     uint256 private s_totalElection;
 
-    event ElectionCreated(uint256 electionId, uint startTime, uint endTime);
-    event VoteCasted(
-        uint256 indexed electionId,
-        address indexed voter,
-        address indexed candidate
-    );
+    event ElectionCreated(uint256 electionId, uint256 startTime, uint256 endTime);
+    event VoteCasted(uint256 indexed electionId, address indexed voter, address indexed candidate);
 
     modifier onlyOwner() {
         require(msg.sender == s_owner, "Only owner can call");
@@ -33,15 +29,8 @@ contract Voting {
         s_totalElection = 0;
     }
 
-    function createElection(
-        address[] calldata candidates,
-        uint startTime,
-        uint endTime
-    ) public onlyOwner {
-        require(
-            endTime > startTime,
-            "End time must be greater than start time"
-        );
+    function createElection(address[] calldata candidates, uint256 startTime, uint256 endTime) public onlyOwner {
+        require(endTime > startTime, "End time must be greater than start time");
         require(candidates.length > 0, "Minimum one candidate is required");
         s_elections[s_totalElection] = Election({
             electionId: s_totalElection,
@@ -53,11 +42,7 @@ contract Voting {
 
         s_totalElection++;
 
-        emit ElectionCreated({
-            electionId: s_totalElection,
-            startTime: startTime,
-            endTime: endTime
-        });
+        emit ElectionCreated({electionId: s_totalElection, startTime: startTime, endTime: endTime});
     }
 
     function castVote(uint256 _id, address _candidate) public {
@@ -91,9 +76,7 @@ contract Voting {
         return s_totalElection;
     }
 
-    function getElectionById(
-        uint256 _id
-    ) external view returns (Election memory) {
+    function getElectionById(uint256 _id) external view returns (Election memory) {
         return s_elections[_id];
     }
 

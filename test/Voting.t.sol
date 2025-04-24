@@ -27,11 +27,7 @@ contract VotingTest is Test {
 
     function testCreateElection() public {
         vm.prank(address(this));
-        voting.createElection({
-            candidates: candidates,
-            startTime: startTime,
-            endTime: endTime
-        });
+        voting.createElection({candidates: candidates, startTime: startTime, endTime: endTime});
 
         Voting.Election memory election = voting.getElectionById({_id: 0});
 
@@ -49,41 +45,25 @@ contract VotingTest is Test {
     function testCreateElectionNotOwner() public {
         vm.prank(address(1));
         vm.expectRevert();
-        voting.createElection({
-            candidates: candidates,
-            startTime: startTime,
-            endTime: endTime
-        });
+        voting.createElection({candidates: candidates, startTime: startTime, endTime: endTime});
     }
 
     function testCreateElectionEndTimeLessThanStartTime() public {
         vm.prank(address(this));
         vm.expectRevert();
-        voting.createElection({
-            candidates: candidates,
-            startTime: block.timestamp + 10,
-            endTime: block.timestamp + 5
-        });
+        voting.createElection({candidates: candidates, startTime: block.timestamp + 10, endTime: block.timestamp + 5});
     }
 
     function testCreateElectionNoCandidate() public {
         vm.prank(address(this));
         vm.expectRevert();
 
-        voting.createElection({
-            candidates: new address[](0),
-            startTime: startTime,
-            endTime: endTime
-        });
+        voting.createElection({candidates: new address[](0), startTime: startTime, endTime: endTime});
     }
 
     function testCastVote() public {
         vm.prank(address(this));
-        voting.createElection({
-            candidates: candidates,
-            startTime: block.timestamp,
-            endTime: block.timestamp + 1000000
-        });
+        voting.createElection({candidates: candidates, startTime: block.timestamp, endTime: block.timestamp + 1000000});
 
         address voter = address(0x123);
         vm.prank(voter);
@@ -116,11 +96,7 @@ contract VotingTest is Test {
 
     function testCastVoteElectionFinished() public {
         vm.prank(address(this));
-        voting.createElection({
-            candidates: candidates,
-            startTime: 0,
-            endTime: 1
-        });
+        voting.createElection({candidates: candidates, startTime: 0, endTime: 1});
 
         address voter = address(0x123);
         vm.prank(voter);
@@ -130,11 +106,7 @@ contract VotingTest is Test {
 
     function testCastVoteAlreadyVoted() public {
         vm.prank(address(this));
-        voting.createElection({
-            candidates: candidates,
-            startTime: block.timestamp,
-            endTime: block.timestamp + 1000000
-        });
+        voting.createElection({candidates: candidates, startTime: block.timestamp, endTime: block.timestamp + 1000000});
 
         address voter = address(0x123);
         vm.prank(voter);
@@ -151,11 +123,7 @@ contract VotingTest is Test {
 
     function testCastVoteCandidateInvalidAdress() public {
         vm.prank(address(this));
-        voting.createElection({
-            candidates: candidates,
-            startTime: block.timestamp,
-            endTime: block.timestamp + 1000000
-        });
+        voting.createElection({candidates: candidates, startTime: block.timestamp, endTime: block.timestamp + 1000000});
 
         address voter = address(0x123);
         vm.prank(voter);
@@ -165,11 +133,7 @@ contract VotingTest is Test {
 
     function testCastVoteCandidateDoesNotExist() public {
         vm.prank(address(this));
-        voting.createElection({
-            candidates: candidates,
-            startTime: block.timestamp,
-            endTime: block.timestamp + 1000000
-        });
+        voting.createElection({candidates: candidates, startTime: block.timestamp, endTime: block.timestamp + 1000000});
 
         address voter = address(0x123);
         vm.prank(voter);
